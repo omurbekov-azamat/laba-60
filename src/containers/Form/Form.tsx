@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import {NewMessage} from "../../types";
 
-const Form = () => {
+interface Props {
+  onSubmit: (message: NewMessage) => void;
+}
+
+const Form: React.FC<Props> = ({onSubmit}) => {
   const [message, setMessages] = useState<NewMessage>({
     name: '',
     message: '',
@@ -14,7 +18,16 @@ const Form = () => {
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(message);
+    if (message.name !== '' && message.message !== '') {
+      onSubmit({
+        ...message,
+      });
+    }
+
+    setMessages({
+      name: '',
+      message: '',
+    });
   };
 
   return (
