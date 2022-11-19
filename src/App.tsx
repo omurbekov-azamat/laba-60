@@ -1,8 +1,10 @@
 import React from 'react';
+import Form from "./containers/Form/Form";
 
 function App() {
   return (
-    <div>
+    <div className='container'>
+      <Form/>
     </div>
   );
 }
