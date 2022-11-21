@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import {NewMessage} from "../../types";
+import {Data} from "../../types";
 
 interface Props {
-  onSubmit: (message: NewMessage) => void;
+  onSubmit: (message: Data) => void;
 }
 
 const Form: React.FC<Props> = ({onSubmit}) => {
-  const [message, setMessages] = useState<NewMessage>({
-    name: '',
+  const [message, setMessages] = useState<Data>({
+    author: '',
     message: '',
   });
 
@@ -18,35 +18,37 @@ const Form: React.FC<Props> = ({onSubmit}) => {
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (message.name !== '' && message.message !== '') {
+    if (message.author !== '' && message.message !== '') {
       onSubmit({
         ...message,
       });
     }
 
     setMessages({
-      name: '',
+      author: '',
       message: '',
     });
   };
 
   return (
     <form onSubmit={onFormSubmit}>
-      <div className='w-100 d-flex justify-content-between p-3 form-control'>
+      <div className='w-100 d-flex justify-content-between p-3 form-control rounded-0'>
         <input
-          id='name'
-          name='name'
+          id='author'
+          name='author'
           className='w-10'
           type="text"
+          value={message.author}
           placeholder='Author Name'
           required
           onChange={onMessageChange}
         />
         <input
-          id='name'
+          id='message'
           name='message'
           className='w-75'
           type="text"
+          value={message.message}
           placeholder='Message'
           required
           onChange={onMessageChange}
