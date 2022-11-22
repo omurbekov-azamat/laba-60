@@ -3,7 +3,7 @@ import {Data} from "./types";
 import Form from "./containers/Form/Form";
 import Messages from "./containers/Message/Messages";
 
-const sound = 'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3';
+const sound = 'https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3';
 const url = 'http://146.185.154.90:8000/messages';
 let lastDate:string = '';
 
@@ -18,26 +18,22 @@ function App() {
     return response.json();
   };
 
-  const getLastDate = (result:[]) => {
-    lastDate = result[result.length -1]['datetime'];
-  };
-
   const run = () => {
-    const importMessages = async () => {
-      const gotMessages = await request(url)
-      setChats(gotMessages);
-      getLastDate(gotMessages);
-    };
-    importMessages().catch(console.error);
+      const importMessages = async () => {
+        const gotMessages = await request(url)
+        setChats(gotMessages);
+        lastDate = gotMessages[gotMessages.length -1]['datetime'];
+      };
+      importMessages().catch(console.error);
   };
 
-  const secondRun = () => {
+  const interval = () => {
     setInterval (async () => {
       if(lastDate) {
         const newUrl = 'http://146.185.154.90:8000/messages?datetime=' + lastDate;
         const newMessage = await request(newUrl);
         if(newMessage.length > 0) {
-          getLastDate(newMessage);
+          lastDate = newMessage[newMessage.length - 1]['datetime'];
           await new Audio(sound).play()
           setChats(prev => (prev.concat(newMessage)));
         }
@@ -47,7 +43,7 @@ function App() {
 
   useEffect(() => {
     run();
-    secondRun();
+    interval();
   }, []);
 
   const sendMessage = (value: Data)  => {
